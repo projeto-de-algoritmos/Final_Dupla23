@@ -99,9 +99,13 @@ function App() {
         path,
         result: calculateKnapSack(path, capacity)
       })
-    }
+    };
 
-    setBestPath(calculateBestPath(results));
+    console.log('results', results);
+
+    const x = calculateBestPath(results);
+    console.log('x', x);
+    setBestPath(x);
   };
 
   const addItem = (vertexId, itemId = selectedItem) => {
@@ -168,7 +172,7 @@ function App() {
         </div>
         <div>
           <label>Origem:</label>
-          <input value={from} onChange={(e) => setFrom(e.target.value.toUpperCase())} type="text"/>
+          <input value={from} onChange={(e) => setFrom(e.target.value.toUpperCase())} type="text" />
           <label>Destino:</label>
           <input value={to} onChange={(e) => setTo(e.target.value.toUpperCase())} type="text" />
         </div>
@@ -286,14 +290,40 @@ function App() {
       {(!bestPath || !minimumPaths) ? (
         <Style.CalculateButton onClick={getMinimumPaths}>Calcular melhor caminho</Style.CalculateButton>
       ) : (
-        <div>
-          <h3>Menores caminhos de {from} até {to}</h3>
-          {minimumPaths.map((path, idx) => {
-            return <h5 key={idx}>{path.map((a) => a.vertice).join(' -> ')}</h5>
-          })}
-          <h3>Melhor caminho geral</h3>
-          <h5>{bestPath.route.map(it => it.vertice).join(' -> ')}</h5>
-          <span>Com esse caminho é possivel obter um total de {bestPath.value}.</span>
+        <div style={{ display: 'flex', justifyContent: 'space-between' }}>
+          <div>
+            <h3>Menores caminhos de {from} até {to}</h3>
+            {minimumPaths.map((path, idx) => {
+              return <h5 key={idx}>{path.map((a) => a.vertice).join(' -> ')}</h5>
+            })}
+          </div>
+          <div>
+            <h3>Melhor caminho geral</h3>
+            <h5>{bestPath.route.map(it => it.vertice).join(' -> ')}</h5>
+            <div style={{ display: 'flex', justifyContent: 'space-between' }}>
+              <h3 style={{ maxWidth: '40%' }}>Com esse caminho é possivel obter um total de {bestPath.value} pontos de raridade.</h3>
+              <table>
+                <thead>
+                  <tr>
+                    <td>Nome</td>
+                    <td>Peso</td>
+                    <td>Raridade</td>
+                  </tr>
+                </thead>
+                <tbody>
+                  {bestPath.items.map((item, idx) => {
+                    return (
+                      <tr key={idx}>
+                        <td>{item.name}</td>
+                        <td>{item.weight}</td>
+                        <td>{item.value}</td>
+                      </tr>
+                    )
+                  })}
+                </tbody>
+              </table>
+            </div>
+          </div>
         </div>
       )
       }

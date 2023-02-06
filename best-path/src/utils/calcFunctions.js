@@ -56,7 +56,11 @@ export const calculateBestPath = (paths) => {
   for (const path of paths) {
     currentValue = path.result.reduce((acc, current) => acc + current.value, 0);
     if (currentValue > bestPath.value) {
-      bestPath = { route: path.path, value: currentValue };
+      bestPath = { 
+        route: path.path, 
+        value: currentValue,
+        items: path.result,
+      };
     }
   };
 
