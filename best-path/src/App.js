@@ -25,14 +25,14 @@ function App() {
   const [itensList, setItensList] = useState(new Map());
   const [graph, setGraph] = useState(new Map());
 
-  const createItem = (name = itemName, weight = itemWeight, value = itemValue) => {
+  const createItem = () => {
     setItensList((currState) => {
       const newItem = new Map();
 
       newItem.set(currState.size + 1, {
-        name,
-        weight,
-        value
+        name: itemName,
+        weight: itemWeight,
+        value: itemValue
       })
 
       const newState = new Map([...currState, ...newItem]);
@@ -45,18 +45,17 @@ function App() {
     })
   };
 
-  const createVertex = (vName = vertexName) => {
-    if (graph.get(vName)) return;
+  const createVertex = () => {
+    if (graph.get(vertexName)) {
+      alert("Um vertice com esse nome ja foi criado");
+      return;
+    };
 
     setGraph((currState) => {
       const newItem = new Map();
-
-      newItem.set(vName.toUpperCase(), { caminhos: [], items: [] })
-
+      newItem.set(vertexName.toUpperCase(), { caminhos: [], items: [] })
       const newState = new Map([...currState, ...newItem]);
-
       setVertexName("");
-
       return newState;
     })
   };
@@ -100,12 +99,12 @@ function App() {
         result: calculateKnapSack(path, capacity)
       })
     };
-    
+
     setBestPath(calculateBestPath(results));
   };
 
-  const addItem = (vertexId, itemId = selectedItem) => {
-    const item = itensList.get(Number.parseInt(itemId));
+  const addItem = (vertexId) => {
+    const item = itensList.get(Number.parseInt(selectedItem));
     graph.get(vertexId)['items'].push(item)
 
     setGraph((currState) => {
@@ -242,7 +241,7 @@ function App() {
                           <option value=""></option>
                           {Array.from(graph.entries())
                             .map(([key, value]) => ({ key, value }))
-                            .filter(it => it.key !== item.key)
+                            .filter(it => it.key !== item.key && !item.value.caminhos.includes(it.key))
                             .map((item, idx) => {
                               return <option key={idx} value={item.key}>{item.key}</option>;
                             })}
@@ -271,7 +270,7 @@ function App() {
           )}
           <div style={{ display: 'flex', flexDirection: 'column' }}>
             <label htmlFor=''>Identificador:</label>
-            <input value={vertexName} onChange={(e) => setVertexName(e.target.value)} type="text" />
+            <input value={vertexName} onChange={(e) => setVertexName(e.target.value.toUpperCase())} type="text" />
             <Style.CreateButton
               onClick={createVertex}
               disabled={!vertexName}
