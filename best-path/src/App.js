@@ -1,4 +1,4 @@
-import { useState } from 'react';
+import { useEffect, useState } from 'react';
 import { calculateBestPath, calculateKnapSack, BFS } from './utils/calcFunctions';
 
 import './App.css';
@@ -10,6 +10,8 @@ function App() {
   const [bestPath, setBestPath] = useState(null);
 
   const [capacity, setCapacity] = useState(10);
+  const [from, setFrom] = useState('');
+  const [to, setTo] = useState('');
 
   const [itemName, setItemName] = useState("");
   const [itemWeight, setItemWeight] = useState(0);
@@ -22,8 +24,6 @@ function App() {
 
   const [itensList, setItensList] = useState(new Map());
   const [graph, setGraph] = useState(new Map());
-
-  // const [elements, setElements] = useState([]);
 
   const createItem = (name = itemName, weight = itemWeight, value = itemValue) => {
     setItensList((currState) => {
@@ -51,7 +51,7 @@ function App() {
     setGraph((currState) => {
       const newItem = new Map();
 
-      newItem.set(vName, { caminhos: [], items: [] })
+      newItem.set(vName.toUpperCase(), { caminhos: [], items: [] })
 
       const newState = new Map([...currState, ...newItem]);
 
@@ -61,9 +61,38 @@ function App() {
     })
   };
 
-  const getPaths = () => {
+  const getMinimumPaths = () => {
+    if (graph.size === 0) {
+      alert('Nenhum vertice cadastrado');
+      return;
+    }
+
+    if (!graph.get(from)) {
+      alert("Origem invalida");
+      return;
+    }
+
+    if (!graph.get(to)) {
+      alert("Destino invalido");
+      return;
+    }
+
+    if (to === from) {
+      alert("Origem e destino iguais");
+      return;
+    }
+
+    if (!minimumPaths) {
+      const mp = BFS(graph, from, to);
+      setMinimumPaths(mp);
+      getBestPath(mp);
+    } else {
+      getBestPath(minimumPaths);
+    }
+  }
+
+  const getBestPath = (mp) => {
     const results = [];
-    const mp = BFS(graph, 'A', 'G');
 
     for (const path of mp) {
       results.push({
@@ -72,7 +101,6 @@ function App() {
       })
     }
 
-    setMinimumPaths(mp);
     setBestPath(calculateBestPath(results));
   };
 
@@ -98,8 +126,6 @@ function App() {
     });
   };
 
-
-
   const quickRegister = () => {
     const i = new Map([
       [1, { name: "Item A", weight: 3, value: 15 }],
@@ -123,14 +149,28 @@ function App() {
 
     setItensList(i);
     setGraph(g);
-  }
+  };
+
+  useEffect(() => {
+    setBestPath(null)
+  }, [capacity]);
+
+  useEffect(() => {
+    setMinimumPaths(null);
+  }, [from, to])
 
   return (
     <Style.Container className="App">
       <div style={{ display: 'flex', justifyContent: 'space-between' }}>
         <div>
-          <label>Capacity:</label>
-          <input value={capacity} onChange={(e) => setCapacity(Number.parseInt(e.target.value))} />
+          <label>Máxima Capacidade:</label>
+          <input value={capacity} onChange={(e) => setCapacity(e.target.value)} type="number" />
+        </div>
+        <div>
+          <label>Origem:</label>
+          <input value={from} onChange={(e) => setFrom(e.target.value.toUpperCase())} type="text"/>
+          <label>Destino:</label>
+          <input value={to} onChange={(e) => setTo(e.target.value.toUpperCase())} type="text" />
         </div>
         <button onClick={quickRegister}>Cadastro Rapido</button>
       </div>
@@ -243,17 +283,17 @@ function App() {
 
       </div>
 
-      {!bestPath && !minimumPaths ? (
-        <Style.CalculateButton onClick={getPaths}>Calcular melhor caminho</Style.CalculateButton>
+      {(!bestPath || !minimumPaths) ? (
+        <Style.CalculateButton onClick={getMinimumPaths}>Calcular melhor caminho</Style.CalculateButton>
       ) : (
         <div>
-          <h3>Menores caminhos de A até G</h3>
+          <h3>Menores caminhos de {from} até {to}</h3>
           {minimumPaths.map((path, idx) => {
             return <h5 key={idx}>{path.map((a) => a.vertice).join(' -> ')}</h5>
           })}
           <h3>Melhor caminho geral</h3>
           <h5>{bestPath.route.map(it => it.vertice).join(' -> ')}</h5>
-          <span>{bestPath.value}</span>
+          <span>Com esse caminho é possivel obter um total de {bestPath.value}.</span>
         </div>
       )
       }
