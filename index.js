@@ -42,7 +42,8 @@ class Graph {
   }
 
   BFS(start, end) {
-    const paths = [];
+    let minimum = Infinity;
+    let paths = [];
     const queue = new Queue();
     queue.enqueue([start]);
 
@@ -50,7 +51,11 @@ class Graph {
       const currentPath = queue.dequeue();
       const node = currentPath[currentPath.length - 1];
 
-      if (node === end) {
+      if (node === end && currentPath.length <= minimum) {
+        if (currentPath.length < minimum) {
+          paths = [];
+          minimum = currentPath.length;
+        }
         paths.push(currentPath);
         continue;
       }
@@ -81,9 +86,26 @@ graph.addVertice('A')
 graph.addVertice('B')
 graph.addVertice('C')
 graph.addVertice('D')
-graph.addAresta('A', 'B')
-graph.addAresta('A', 'C')
-graph.addAresta('C', 'D')
-graph.addAresta('B', 'D')
-console.log(graph.BFS('A', 'D'));
+graph.addVertice('E')
+graph.addVertice('F')
+graph.addVertice('G')
+
+graph.addAresta('A', 'B');
+graph.addAresta('A', 'C');
+
+graph.addAresta('B', 'D');
+graph.addAresta('B', 'F');
+
+graph.addAresta('C', 'D');
+graph.addAresta('C', 'E');
+
+graph.addAresta('D', 'G');
+graph.addAresta('D', 'E');
+graph.addAresta('D', 'F');
+
+graph.addAresta('F', 'G');
+
+graph.addAresta('E', 'G');
+
+console.log(graph.BFS('A', 'G'));
 
