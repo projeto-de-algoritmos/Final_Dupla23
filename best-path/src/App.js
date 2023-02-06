@@ -6,9 +6,7 @@ import { Graph } from './utils/graph';
 
 import './App.css';
 
-import {
-  Container
-} from './style';
+import * as Style from './style';
 
 const item = new Item();
 const graph = new Graph();
@@ -71,17 +69,17 @@ function App() {
   const calculateBestPath = (paths) => {
     let currentValue;
     let bestPath = { route: null, value: -1 };
-  
+
     for (const path of paths) {
       currentValue = path.result.reduce((acc, current) => acc + current.value, 0);
       if (currentValue > bestPath.value) {
         bestPath = { route: path.path, value: currentValue };
       }
     };
-  
+
     return bestPath;
   }
-  
+
 
   const createItem = () => {
     item.createItem(
@@ -93,7 +91,7 @@ function App() {
   };
 
   const getPaths = () => {
-    const results = []; 
+    const results = [];
     const mp = graph.BFS('A', 'G');
 
     for (const path of mp) {
@@ -127,36 +125,34 @@ function App() {
   // }, [graph.vertices]);
 
   return (
-    <Container className="App">
+    <Style.Container className="App">
       <div>
-        <h3>Itens:</h3>
-        <div style={{ display: 'flex', justifyContent: 'space-evenly' }}>
-          <div>
-            {graph.vertices.size ? (
-              <table>
-                <thead>
-                  <tr>
-                    <td>Nome</td>
-                    <td>Peso</td>
-                    <td>Raridade</td>
-                  </tr>
-                </thead>
-                <tbody>
-                  {Array.from(item.items.entries()).map(([key, value]) => ({ key, value })).map(item => {
-                    return (
-                      <tr key={item.key}>
-                        <td>{item.value.name}</td>
-                        <td>{item.value.weight}</td>
-                        <td>{item.value.value}</td>
-                      </tr>
-                    )
-                  })}
-                </tbody>
-              </table>
-            ) : (
-              <h4>Nenhum item cadastrado</h4>
-            )}
-          </div>
+        <Style.SectionName>Itens disponíveis:</Style.SectionName>
+        <Style.ItemsSection>
+          {graph.vertices.size ? (
+            <Style.ItemTable>
+              <Style.ItemTableHeader>
+                <tr>
+                  <td>Nome</td>
+                  <td>Peso</td>
+                  <td>Raridade</td>
+                </tr>
+              </Style.ItemTableHeader>
+              <tbody>
+                {Array.from(item.items.entries()).map(([key, value]) => ({ key, value })).map(item => {
+                  return (
+                    <tr key={item.key}>
+                      <td>{item.value.name}</td>
+                      <td>{item.value.weight}</td>
+                      <td>{item.value.value}</td>
+                    </tr>
+                  )
+                })}
+              </tbody>
+            </Style.ItemTable>
+          ) : (
+            <h4>Nenhum item cadastrado</h4>
+          )}
           <div style={{ display: 'flex', flexDirection: 'column' }}>
             <label htmlFor=''>Nome:</label>
             <input id='item-name-input' type="text" ref={itemNameInputRef} />
@@ -166,24 +162,33 @@ function App() {
             <input id='item-value-input' type="number" ref={itemValueInputRef} />
             <button onClick={createItem} style={{ marginTop: '1rem' }}>Criar</button>
           </div>
-        </div>
+        </Style.ItemsSection>
       </div>
       <div>
-        <h3>Grafo:</h3>
-        <div style={{ display: 'flex', justifyContent: 'space-evenly' }}>
-          <div style={{ display: 'flex', flexDirection: 'column' }}>
-            <label htmlFor=''>Nome:</label>
-            <input id='item-name-input' type="text" ref={itemNameInputRef} />
-            <label htmlFor=''>Peso:</label>
-            <input id='item-weight-input' type="number" ref={itemWeightInputRef} />
-            <label htmlFor=''>Valor:</label>
-            <input id='item-value-input' type="number" ref={itemValueInputRef} />
-            <button onClick={createItem} style={{ marginTop: '1rem' }}>Criar</button>
+        <Style.SectionName>Grafo:</Style.SectionName>
+        <Style.GraphSection>
+          <div style={{ width: '350px' }}>
+            <h1> GRAFO </h1>
           </div>
-        </div>
+
+
+          <div style={{ display: 'flex', justifyContent: 'space-evenly' }}>
+            <div style={{ display: 'flex', flexDirection: 'column' }}>
+              <label htmlFor=''>Nome:</label>
+              <input id='item-name-input' type="text" ref={itemNameInputRef} />
+              <label htmlFor=''>Peso:</label>
+              <input id='item-weight-input' type="number" ref={itemWeightInputRef} />
+              <label htmlFor=''>Valor:</label>
+              <input id='item-value-input' type="number" ref={itemValueInputRef} />
+              <button onClick={createItem} style={{ marginTop: '1rem' }}>Criar</button>
+            </div>
+          </div>
+        </Style.GraphSection>
+
       </div>
+
       {!bestPath && !minimumPaths ? (
-        <button onClick={getPaths}>Calcular melhor caminho</button>
+        <Style.CalculateButton onClick={getPaths}>Calcular melhor caminho</Style.CalculateButton>
       ) : (
         <div>
           <h3>Menores caminhos de A até G</h3>
@@ -195,18 +200,7 @@ function App() {
           <span>{bestPath.value}</span>
         </div>
       )}
-      {/* <div>
-        {graph.vertices.size > 0 ? (
-          <CytoscapeComponent
-            elements={elements}
-            style={{ width: '50%', height: '100%', backgroundColor: "lightgray" }}
-            layout={{ name: "circle" }}
-          />
-        ) : (
-          <h4>Nenhum no cadastro</h4>
-        )}
-      </div> */}
-    </Container>
+    </Style.Container>
   );
 }
 
