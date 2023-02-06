@@ -100,12 +100,8 @@ function App() {
         result: calculateKnapSack(path, capacity)
       })
     };
-
-    console.log('results', results);
-
-    const x = calculateBestPath(results);
-    console.log('x', x);
-    setBestPath(x);
+    
+    setBestPath(calculateBestPath(results));
   };
 
   const addItem = (vertexId, itemId = selectedItem) => {
