@@ -41,3 +41,15 @@ export const CalculateButton = styled.button`
   border: 1px solid black;
   margin-top: 5rem;
 `;
+
+export const CreateButton = styled.button`
+  margin-top: 1rem;
+`;
+
+export const VertexSelect = styled.select`
+  width: 120px;
+`;
+
+export const ConfirmButton = styled.button`
+  margin-left: 0.5rem;
+`;
