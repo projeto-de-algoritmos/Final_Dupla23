@@ -13,15 +13,13 @@ class Item {
   }
 
   calculateKnapSack(items) {
-    // VALUE, WEIGHT
-    // filtra os items
     const dp = [];
     items = items.map(it => it.items).flat()
 
     for (let i = 0; i <= items.length; i++) {
       dp.push(new Array(this.capacity + 1).fill(0));
     }
-  
+
     for (let i = 1; i < items.length; i++) {
       for (let j = 0; j <= this.capacity; j++) {
         if (items[i - 1].weight > j) {
@@ -31,7 +29,7 @@ class Item {
         }
       }
     }
-  
+
     const result = [];
     let i = items.length;
     let j = this.capacity;
@@ -42,10 +40,10 @@ class Item {
       }
       i--;
     }
-  
+
     return result;
   }
-}
+};
 
 class Queue {
   constructor() {
@@ -98,7 +96,8 @@ class Graph {
           paths = [];
           minimum = currentPath.length;
         }
-        paths.push(currentPath.map((path) => this.vertices.get(path)));
+
+        paths.push(currentPath.map((vertice) => ({ vertice, items: this.vertices.get(vertice)['items'] })));
         continue;
       }
 
@@ -111,16 +110,17 @@ class Graph {
 
     return paths;
   }
-}
+};
+
 
 const calculateBestPath = (paths) => {
   let currentValue;
   let bestPath = { route: null, value: -1 };
 
   for (const path of paths) {
-    currentValue = path.reduce((acc, current) => acc + current.value, 0);
+    currentValue = path.result.reduce((acc, current) => acc + current.value, 0);
     if (currentValue > bestPath.value) {
-      bestPath = { route: path, value: currentValue };
+      bestPath = { route: path.path, value: currentValue };
     }
   };
 
@@ -175,10 +175,13 @@ graph.addAresta('E', 'G');
 
 
 const minimumPaths = graph.BFS('A', 'G')
-// VALUE, WEIGHT
+
 const results = []
 for (path of minimumPaths) {
-  results.push(item.calculateKnapSack(path, 10))
+  results.push({
+    path,
+    result: item.calculateKnapSack(path)
+  })
 }
 
 console.log(calculateBestPath(results))
