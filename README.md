@@ -14,8 +14,11 @@ O SearchBestBestPath procura realizar uma busca em dois níveis por uma melhor r
 É feito um BFS (Breadth-first search) por todos os caminhos possíveis de um ponto inicial até um ponto final, a partir dai é utilizado o problema da mochila (KnapSack) para procurar pelo melhor caminho possível em que seja possível obter os melhores itens possíveis (raridade).
 É possivel cadastrar itens, vertices as suas conexões, para a formação do grafo. Também é possivel utilizar um grafo já pré-montado para facilitar a execução.
 
-## Screenshots
-Adicione 3 ou mais screenshots do projeto em funcionamento.
+## Gravacao
+
+[Stream](https://unbbr.sharepoint.com/:v:/s/GravaesPA608/EYF6UdCSeDVCjSTjExfw9IMBQubLA612GNAw9Pp-xyYs3A?e=2ted9i)
+
+[Download Aqui!](./assets/FinalGravacao.mp4)
 
 ## Instalação 
 **Linguagem**: JavaScript<br>
