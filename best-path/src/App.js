@@ -127,13 +127,13 @@ function App() {
 
   const quickRegister = () => {
     const i = new Map([
-      [1, { name: "Item A", weight: 3, value: 15 }],
-      [2, { name: "Item B", weight: 4, value: 21 }],
-      [3, { name: "Item C", weight: 1, value: 3 }],
-      [4, { name: "Item D", weight: 5, value: 27 }],
-      [5, { name: "Item E", weight: 8, value: 40 }],
-      [6, { name: "Item F", weight: 9, value: 43 }],
-      [7, { name: "Item G", weight: 6, value: 31 }]
+      [1, { name: "Lanterna", weight: 3, value: 15 }],
+      [2, { name: "Rádio", weight: 4, value: 21 }],
+      [3, { name: "Mapa", weight: 1, value: 3 }],
+      [4, { name: "Espada", weight: 5, value: 27 }],
+      [5, { name: "Diamante", weight: 8, value: 40 }],
+      [6, { name: "Cajado Mágico", weight: 9, value: 43 }],
+      [7, { name: "Joia", weight: 6, value: 31 }]
     ]);
 
     const g = new Map([
