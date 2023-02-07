@@ -16,7 +16,7 @@ O SearchBestBestPath procura realizar uma busca em dois níveis por uma melhor r
 
 ## Gravacao
 
-[Stream](https://unbbr.sharepoint.com/:v:/s/GravaesPA608/EYF6UdCSeDVCjSTjExfw9IMBQubLA612GNAw9Pp-xyYs3A?e=2ted9i)
+[Stream](https://unbbr.sharepoint.com/:v:/s/GravaesPA608/EV96frki6rRFrepGwjK-z_8BORQSYpIpkWP_8DEKSrGtWw?e=frKpEX)
 
 [Download Aqui!](./assets/FinalGravacao.mp4)
 
