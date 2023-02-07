@@ -16,56 +16,43 @@ class Queue {
   }
 }
 
+export function calculateKnapSack(items, capacity) {
+  items = items.map(it => it.items).flat();
 
-export const calculateKnapSack = (path, maxCapacity) => {
-  const dp = [];
-  const items = path.map(it => it.items).flat()
+  const n = items.length;
+  let dp = Array.from({ length: n + 1 }, () => Array(capacity + 1).fill(0));
+  let selected = Array.from({ length: n + 1 }, () => Array(capacity + 1).fill(0));
 
-  for (let i = 0; i <= items.length; i++) {
-    dp.push(new Array(maxCapacity + 1).fill(0));
-  }
-
-  for (let i = 1; i < items.length; i++) {
-    for (let j = 0; j <= maxCapacity; j++) {
-      if (items[i - 1].weight > j) {
+  for (let i = 1; i <= n; i++) {
+    for (let j = 1; j <= capacity; j++) {
+      if (j < items[i - 1].weight) {
         dp[i][j] = dp[i - 1][j];
       } else {
-        dp[i][j] = Math.max(dp[i - 1][j], dp[i - 1][j - items[i - 1].weight] + items[i - 1].value);
+        if (dp[i - 1][j] > dp[i - 1][j - items[i - 1].weight] + items[i - 1].value) {
+          dp[i][j] = dp[i - 1][j];
+        } else {
+          dp[i][j] = dp[i - 1][j - items[i - 1].weight] + items[i - 1].value;
+          selected[i][j] = 1;
+        }
       }
     }
   }
 
-  const result = [];
-  let i = items.length;
-  let j = maxCapacity;
+  let result = [];
+  let i = n;
+  let j = capacity;
   while (i > 0 && j > 0) {
-    if (dp[i][j] !== dp[i - 1][j]) {
-      result.unshift(items[i - 1]);
+    if (selected[i][j] === 1) {
+      result.push(i);
       j -= items[i - 1].weight;
     }
-    i--;
-  }
-
-  return result;
-};
-
-export const calculateBestPath = (paths) => {
-  let currentValue;
-  let bestPath = { route: null, value: -1 };
-
-  for (const path of paths) {
-    currentValue = path.result.reduce((acc, current) => acc + current.value, 0);
-    if (currentValue > bestPath.value) {
-      bestPath = { 
-        route: path.path, 
-        value: currentValue,
-        items: path.result,
-      };
-    }
+    i -= 1;
   };
 
-  return bestPath;
-};
+  result.reverse();
+
+  return [dp[n][capacity], result.map(it => items[it - 1])];
+}
 
 export const BFS = (graph, start, end) => {
   let minimum = Infinity;

@@ -1,5 +1,5 @@
 import { useEffect, useState } from 'react';
-import { calculateBestPath, calculateKnapSack, BFS } from './utils/calcFunctions';
+import { calculateKnapSack, BFS } from './utils/calcFunctions';
 
 import './App.css';
 
@@ -95,12 +95,12 @@ function App() {
 
     for (const path of mp) {
       results.push({
-        path,
-        result: calculateKnapSack(path, capacity)
+        route: path,
+        result: calculateKnapSack(path, Number.parseInt(capacity, 10))
       })
     };
 
-    setBestPath(calculateBestPath(results));
+    setBestPath(results.reduce((acc, curr) => acc.result[0] > curr.result[0] ? acc : curr));
   };
 
   const addItem = (vertexId) => {
@@ -296,7 +296,7 @@ function App() {
             <h3>Melhor caminho geral</h3>
             <h5>{bestPath.route.map(it => it.vertice).join(' -> ')}</h5>
             <div style={{ display: 'flex', justifyContent: 'space-between' }}>
-              <h3 style={{ maxWidth: '40%' }}>Com esse caminho é possivel obter um total de {bestPath.value} pontos de raridade.</h3>
+              <h3 style={{ maxWidth: '40%' }}>Com esse caminho é possivel obter um total de {bestPath.result[0]} pontos de raridade.</h3>
               <table>
                 <thead>
                   <tr>
@@ -306,7 +306,7 @@ function App() {
                   </tr>
                 </thead>
                 <tbody>
-                  {bestPath.items.map((item, idx) => {
+                  {bestPath.result[1].map((item, idx) => {
                     return (
                       <tr key={idx}>
                         <td>{item.name}</td>
